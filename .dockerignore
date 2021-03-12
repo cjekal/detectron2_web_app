@@ -1,0 +1,8 @@
+.dockerignore
+.git
+.gitignore
+Dockerfile
+__pycache__
+Dockerfiles
+gcloud_build_and_run.sh
+README.md

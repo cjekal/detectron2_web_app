@@ -17,3 +17,5 @@ gsutil cp gs://sbir-ii-models/detectron2/exp-1/model_0088499.pth model.pth
 gcloud builds submit --project "sbir-training" --tag gcr.io/sbir-training/detectron2-serve --timeout=86400 && \
 gcloud run deploy detectron2-serve --project "sbir-training" --image gcr.io/sbir-training/detectron2-serve:latest --region "us-west1" --platform managed --memory 2G --allow-unauthenticated
 ```
+
+

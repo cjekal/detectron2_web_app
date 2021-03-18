@@ -53,6 +53,12 @@ RUN pip install --user -r /home/appuser/detectron2_repo/requirements.txt
 # add dir
 COPY . /home/appuser/detectron2_repo
 
+ARG model_version
+ARG model_iteration
+
+ENV MODEL_VERSION $model_version
+ENV MODEL_ITERATION $model_iteration
+
 # Make port 8080 available to the world outside the container
 ENV PORT 8080
 EXPOSE 8080

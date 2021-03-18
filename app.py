@@ -60,7 +60,7 @@ def run_inference(img_path = 'file.jpg'):
 
 @app.route("/")
 def index():
-	return render_template('index.html')
+	return render_template('index.html', model_version=os.environ["MODEL_VERSION"], model_iteration=os.environ["MODEL_ITERATION"])
 
 
 @app.route("/detect", methods=['POST', 'GET'])

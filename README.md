@@ -5,7 +5,7 @@ https://towardsdatascience.com/instance-segmentation-web-app-63016b8ed4ae
 How to build locally:
 ```
 gsutil cp gs://sbir-ii-models/detectron2/exp-1/model_0088499.pth model.pth
-docker build -t detectron2-serve .
+docker build --build-arg model_version=<model version> --build-arg model_iteration=<model iteration> -t detectron2-serve .
 docker tag detectron2-serve:latest gcr.io/sbir-training/detectron2-serve:latest
 docker push gcr.io/sbir-training/detectron2-serve:latest
 docker run --rm -it -p 8080:8080 detectron2-serve

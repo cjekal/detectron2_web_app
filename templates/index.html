@@ -50,24 +50,18 @@
 
 <p> The smaller the image the quicker the inference!</p>
 
-<h3>Upload an image</h3>
-<form action = "/detect" method = "POST" enctype = "multipart/form-data">
-	<input type = "file" name = "file" />
-	<input name = "submit" type = "submit"/>
-</form>
+<div id="upload_image">
+	<h3>Upload an image</h3>
+	<form action = "/detect" method = "POST" enctype = "multipart/form-data">
+		<input type = "file" name = "file" />
+		<input name = "submit" type = "submit"/>
+	</form>
+</div>
 
-<h3>From a URL</h3>
-<form action = "/detect" method = "GET" enctype = "multipart/form-data">
-	<input type="text" name="url">
-	<input type = "submit"/>
-</form>
-
-<h3>From a pre-selected list</h3>
-<form action = "/detect" method = "GET" enctype = "multipart/form-data">
-  <select name="url">
-	<option value="https://www.bendplating.com/wp-content/uploads/2017/03/rust-1-e1488346306943-1288x724.jpg">Rust on a bridge</option>
-	<option value="https://www.performance-painting.com/hs-fs/hubfs/anti%20corrosion%20coatings.png">Rust on a pipe</option>
-	<option value="https://www.news.ucsb.edu/sites/default/files/styles/article_horizontal/public/images/2017/Corrosion.jpg">Rust on a plate</option>
-  </select>
-  <input type="submit" value = "Submit" name = "url">
-</form>
+<div id="from_url">
+	<h3>From a URL</h3>
+	<form action = "/detect" method = "GET" enctype = "multipart/form-data">
+		<input type="text" name="url">
+		<input type = "submit"/>
+	</form>
+</div>

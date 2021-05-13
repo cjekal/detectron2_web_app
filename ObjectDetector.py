@@ -45,7 +45,7 @@ class Detector:
 			return []
 		
 		DatasetCatalog.register("my_dataset", get_dataset_catalog)
-		MetadataCatalog.get("my_dataset").thing_classes = ["Corrosion", "Light Corrosion"]
+		MetadataCatalog.get("my_dataset").thing_classes = ["Edge", "Weld"]
 
 	# build model and convert for inference
 	def convert_model_for_inference(self):

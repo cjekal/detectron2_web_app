@@ -5,7 +5,7 @@ https://towardsdatascience.com/instance-segmentation-web-app-63016b8ed4ae
 How to build locally:
 ```
 gsutil cp gs://sbir-ii-models/detectron2/exp-1/model_0088499.pth model.pth
-docker build --build-arg model_version=<model version> --build-arg model_iteration=<model iteration> -t detectron2-serve .
+docker build --build-arg model_version=<model version> --build-arg model_iteration=<model iteration> -t detectron2-serve:latest .
 docker tag detectron2-serve:latest gcr.io/sbir-training/detectron2-serve:latest
 docker push gcr.io/sbir-training/detectron2-serve:latest
 docker run --rm -it -p 8080:8080 detectron2-serve
@@ -19,3 +19,10 @@ gcloud run deploy detectron2-serve --project "sbir-training" --image gcr.io/sbir
 ```
 
 
+for edges-and-welds
+```sh
+docker build --build-arg model_version=edges-and-welds --build-arg model_iteration=0017249 -t detectron2-serve:edges-and-welds .
+docker tag detectron2-serve:edges-and-welds gcr.io/sbir-training/detectron2-serve:edges-and-welds
+docker push gcr.io/sbir-training/detectron2-serve:edges-and-welds
+gcloud run deploy edges-and-welds-serve --project "sbir-training" --image gcr.io/sbir-training/detectron2-serve:edges-and-welds --region "us-west1" --platform managed --memory 2G --allow-unauthenticated
+```

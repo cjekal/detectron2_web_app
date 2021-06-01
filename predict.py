@@ -31,7 +31,7 @@ if __name__ == "__main__":
     
     predictions = []
     for image, output in zip(images, outputs):
-        instances = output['instances']
+        instances = output['instances'].to("cpu")
         num_instances = len(instances)
         image_size = instances.image_size
         json_instances = []

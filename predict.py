@@ -17,8 +17,9 @@ if __name__ == "__main__":
     def get_dataset_catalog():
         return []
 
+    thing_classes = ["Edge", "Weld"]
     DatasetCatalog.register("my_dataset", get_dataset_catalog)
-    MetadataCatalog.get("my_dataset").thing_classes = ["Edge", "Weld"]
+    MetadataCatalog.get("my_dataset").thing_classes = thing_classes
 
     predictor = BatchPredictor(cfg)
     images = [cv2.imread(file) for file in
@@ -48,7 +49,7 @@ if __name__ == "__main__":
                 "pred_box_area": pred_box_area,
                 "pred_box_center": pred_box_center,
                 "score": score,
-                "pred_class": pred_class,
+                "pred_class": thing_classes[pred_class],
                 "pred_mask": pred_mask
             })
         predictions.append({

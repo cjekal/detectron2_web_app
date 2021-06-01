@@ -28,5 +28,35 @@ if __name__ == "__main__":
               glob.glob("data/inference/**/*.PNG", recursive=True)
     ]
     outputs = predictor.predict(images)
+    
+    predictions = []
+    for image, output in zip(images, outputs):
+        instances = output['instances']
+        num_instances = len(instances)
+        image_size = instances.image_size
+        json_instances = []
+        for i in range(num_instances):
+            instance = instances[i]
+            pred_box_area = instance.pred_boxes.area().data.tolist()
+            pred_box_center = instance.pred_boxes.get_centers().data.tolist()
+            pred_box = instance.pred_boxes.data.tolist()
+            score = instance.scores.data.tolist()
+            pred_class = instance.pred_classes.data.tolist()
+            pred_mask = instance.pred_masks.data.tolist()
+            json_instances.append({
+                "pred_box": pred_box,
+                "pred_box_area": pred_box_area,
+                "pred_box_center": pred_box_center,
+                "score": score,
+                "pred_class": pred_class,
+                "pred_mask": pred_mask
+            })
+        predictions.append({
+            "image": image,
+            "image_size": image_size,
+            "num_instances": num_instances,
+            "instances":json_instances
+        })
+
     with open("data/predictions.json", "w") as f:
-        json.dump(outputs, f, indent=2)
+        json.dump(predictions, f, indent=2)

@@ -58,6 +58,9 @@ if __name__ == "__main__":
             "num_instances": num_instances,
             "instances":json_instances
         })
+    
+    print("about to serialize:")
+    print(json.dumps(predictions, indent=2))
 
     with open("data/predictions.json", "w") as f:
         json.dump(predictions, f, indent=2)

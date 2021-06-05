@@ -28,7 +28,7 @@ def process_chunk(chunk, predictor):
     for image, output in zip(chunk, outputs):
         instances = output['instances'].to("cpu")
         os.makedirs(os.path.dirname(get_predictions_filename(image)), exist_ok=True)
-        with open(get_predictions_filename(image), "w") as f:
+        with open(get_predictions_filename(image), "wb") as f:
             joblib.dump(instances, f)
     print("done processing chunk")
 

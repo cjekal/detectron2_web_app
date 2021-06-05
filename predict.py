@@ -2,13 +2,11 @@ from batch_predictor import BatchPredictor
 from detectron2.config import get_cfg
 from detectron2 import model_zoo
 from detectron2.data import MetadataCatalog, DatasetCatalog
-import pycocotools.mask as mask_util
 
 import cv2
-import json
 import glob
 import os
-import numpy as np
+import joblib
 
 def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
@@ -17,7 +15,7 @@ def chunks(lst, n):
 
 def get_predictions_filename(image):
     filename_without_ext = os.path.splitext(os.path.basename(image))[0]
-    return f"data/predictions/edges-and-welds/{filename_without_ext}.json"
+    return f"data/predictions/edges-and-welds/{filename_without_ext}.pkl"
 
 def image_is_unprocessed(image):
     predictions_file = get_predictions_filename(image)
@@ -29,37 +27,9 @@ def process_chunk(chunk, predictor):
     
     for image, output in zip(chunk, outputs):
         instances = output['instances'].to("cpu")
-        num_instances = len(instances)
-        image_size = instances.image_size
-        json_instances = []
-        for i in range(num_instances):
-            instance = instances[i]
-            pred_box_area = instance.pred_boxes.area().data.tolist()[0]
-            pred_box_center = instance.pred_boxes.get_centers().data.tolist()[0]
-            pred_box = instance.pred_boxes.tensor.tolist()[0]
-            score = instance.scores.data.tolist()[0]
-            pred_class = instance.pred_classes.data.tolist()[0]
-            pred_mask = mask_util.encode(np.asfortranarray(instance.pred_masks)) # https://github.com/facebookresearch/detectron2/issues/347
-            for rle in pred_mask:
-                print(rle)
-                rle["counts"] = rle["counts"].decode("utf-8")
-            json_instances.append({
-                "pred_box": pred_box,
-                "pred_box_area": pred_box_area,
-                "pred_box_center": pred_box_center,
-                "score": score,
-                "pred_class": thing_classes[pred_class],
-                "pred_mask": pred_mask
-            })
-        predictions = {
-            "image": image,
-            "image_size": image_size,
-            "num_instances": num_instances,
-            "instances": json_instances
-        }
         os.makedirs(os.path.dirname(get_predictions_filename(image)), exist_ok=True)
         with open(get_predictions_filename(image), "w") as f:
-            json.dump(predictions, f, indent=2)
+            joblib.dump(instances, f)
     print("done processing chunk")
 
 if __name__ == "__main__":

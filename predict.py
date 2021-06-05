@@ -34,7 +34,7 @@ def process_chunk(chunk, predictor):
             instance = instances[i]
             pred_box_area = instance.pred_boxes.area().data.tolist()
             pred_box_center = instance.pred_boxes.get_centers().data.tolist()
-            pred_box = instance.pred_boxes.data.tolist()
+            pred_box = instance.pred_boxes.tolist()
             score = instance.scores.data.tolist()
             pred_class = instance.pred_classes.data.tolist()
             pred_mask = instance.pred_masks.data.tolist()

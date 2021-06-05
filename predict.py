@@ -2,11 +2,13 @@ from batch_predictor import BatchPredictor
 from detectron2.config import get_cfg
 from detectron2 import model_zoo
 from detectron2.data import MetadataCatalog, DatasetCatalog
+import pycocotools.mask as mask_util
 
 import cv2
 import json
 import glob
 import os
+import numpy as np
 
 def chunks(lst, n):
     """Yield successive n-sized chunks from lst."""
@@ -32,12 +34,15 @@ def process_chunk(chunk, predictor):
         json_instances = []
         for i in range(num_instances):
             instance = instances[i]
-            pred_box_area = instance.pred_boxes.area().data.tolist()
-            pred_box_center = instance.pred_boxes.get_centers().data.tolist()
-            pred_box = instance.pred_boxes.tolist()
-            score = instance.scores.data.tolist()
-            pred_class = instance.pred_classes.data.tolist()
-            pred_mask = instance.pred_masks.data.tolist()
+            pred_box_area = instance.pred_boxes.area().data.tolist()[0]
+            pred_box_center = instance.pred_boxes.get_centers().data.tolist()[0]
+            pred_box = instance.pred_boxes.tensor.tolist()[0]
+            score = instance.scores.data.tolist()[0]
+            pred_class = instance.pred_classes.data.tolist()[0]
+            pred_mask = mask_util.encode(np.asfortranarray(instance.pred_masks)) # https://github.com/facebookresearch/detectron2/issues/347
+            for rle in pred_mask:
+                print(rle)
+                rle["counts"] = rle["counts"].decode("utf-8")
             json_instances.append({
                 "pred_box": pred_box,
                 "pred_box_area": pred_box_area,
@@ -52,9 +57,7 @@ def process_chunk(chunk, predictor):
             "num_instances": num_instances,
             "instances": json_instances
         }
-        print("about to serialize:")
-        print(json.dumps(predictions, indent=2))
-
+        os.makedirs(os.path.dirname(get_predictions_filename(image)), exist_ok=True)
         with open(get_predictions_filename(image), "w") as f:
             json.dump(predictions, f, indent=2)
     print("done processing chunk")

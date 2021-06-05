@@ -22,6 +22,7 @@ def image_is_unprocessed(image):
     return not os.path.exists(predictions_file)
 
 def process_chunk(chunk, predictor):
+    print(f"processing chunk of {len(chunk)} images")
     outputs = predictor.predict([cv2.imread(filename) for filename in chunk])
     
     for image, output in zip(chunk, outputs):

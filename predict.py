@@ -22,7 +22,7 @@ def image_is_unprocessed(image):
     return not os.path.exists(predictions_file)
 
 def process_chunk(chunk, predictor):
-    outputs = predictor.predict(chunk)
+    outputs = predictor.predict([cv2.imread(filename) for filename in chunk])
     
     for image, output in zip(chunk, outputs):
         instances = output['instances'].to("cpu")
@@ -73,15 +73,11 @@ if __name__ == "__main__":
     MetadataCatalog.get("my_dataset").thing_classes = thing_classes
 
     predictor = BatchPredictor(cfg)
-    images = [cv2.imread(file) for file in
-              glob.glob("data/inference/*.jpg", recursive=True) +
-              glob.glob("data/inference/*.JPG", recursive=True) +
-              glob.glob("data/inference/*.png", recursive=True) +
-              glob.glob("data/inference/*.PNG", recursive=True)
-    ]
-    images = [i for i in images if image_is_unprocessed(i)]
-    outputs = predictor.predict(images)
-    
+    image_filenames = glob.glob("data/inference/*.jpg", recursive=True) + glob.glob("data/inference/*.JPG", recursive=True) + glob.glob("data/inference/*.png", recursive=True) + glob.glob("data/inference/*.PNG", recursive=True)
+    image_filenames = [i for i in image_filenames if image_is_unprocessed(i)]
+    for chunk in chunks(image_filenames, 100):
+        process_chunk(chunk, predictor)
+    print("done processing!")
 
 """
 pseudo-code:

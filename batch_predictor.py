@@ -5,7 +5,6 @@ import sys
 from collections import OrderedDict
 from typing import Optional
 import torch
-from fvcore.nn.precise_bn import get_bn_modules
 from torch.nn.parallel import DistributedDataParallel
 
 import detectron2.data.transforms as T

@@ -56,13 +56,13 @@ if __name__ == "__main__":
 """
 pseudo-code:
 do the following once per model type (corrosion vs edges/welds)
-1. find images to process (those with missing .json prediction files)
+1. find images to process (those with missing .pkl prediction files)
 1. batch into 100 images at a time
 1. for each batch:
     1. run batch prediction
     1. for each prediction:
-        1. output to individual .json prediction file with same filename as source image
+        1. output to individual .pkl prediction file with same filename as source image
 
-after all model types are run, perform merging of .json prediction files
+after all model types are run, perform merging of .pkl prediction files
 1. for each image, output Visualizer output image with no scaling
 """

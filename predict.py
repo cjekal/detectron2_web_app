@@ -39,18 +39,20 @@ if __name__ == "__main__":
     metadata = {
         "corrosion": {
             "name": "corrosion",
-            "thing_classes": ["Edge", "Weld"]
+            "thing_classes": ["Corrosion", "Light Corrosion"],
+            "model_weights_path": "./model-corrosion.pth"
         },
         "edges-and-welds": {
             "name": "edges-and-welds",
-            "thing_classes": ["Corrosion", "Light Corrosion"]
+            "thing_classes": ["Edge", "Weld"],
+            "model_weights_path": "./model-edges-and-welds.pth"
         }
     }[sys.argv[1]]
 
     cfg = get_cfg()
     cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x.yaml"))
     cfg.MODEL.ROI_HEADS.NUM_CLASSES = 2
-    cfg.MODEL.WEIGHTS = "./model.pth"
+    cfg.MODEL.WEIGHTS = metadata["model_weights_path"]
     cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7
 
     def get_dataset_catalog():

@@ -65,6 +65,6 @@ if __name__ == "__main__":
     predictor = BatchPredictor(cfg)
     image_filenames = glob.glob("data/inference/*.jpg", recursive=True) + glob.glob("data/inference/*.JPG", recursive=True) + glob.glob("data/inference/*.png", recursive=True) + glob.glob("data/inference/*.PNG", recursive=True)
     image_filenames = [i for i in image_filenames if image_is_unprocessed(i)]
-    for chunk in chunks(image_filenames, 75):
+    for chunk in chunks(image_filenames, 64):
         process_chunk(chunk, predictor)
     print("done processing!")

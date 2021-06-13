@@ -20,7 +20,7 @@ def merge(prediction_pair):
     edges_and_welds_prediction = joblib.load(prediction_pair["edges_and_welds_file"])
     for i, pred_class in enumerate(edges_and_welds_prediction.pred_classes):
         edges_and_welds_prediction.pred_classes[i] = pred_class + 2
-    return {"prediction_pair": prediction_pair, "instances": Instances.cat[corrosion_prediction, edges_and_welds_prediction]}
+    return {"prediction_pair": prediction_pair, "instances": Instances.cat([corrosion_prediction, edges_and_welds_prediction])}
 
 def get_merged_filename(merged_prediction):
     return os.path.join(f"data/predictions/merged/{merged_prediction['prediction_pair']['base_file']}")

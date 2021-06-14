@@ -24,7 +24,7 @@ if __name__ == "__main__":
     filenames = glob.glob("data/predictions/merged/*.pkl")
     for filename in filenames:
         predictions = joblib.load(filename)
-        im, basename_without_ext, basename_ext = get_raw_image(filename)
+        im, basename_without_ext, _ = get_raw_image(filename)
         v = Visualizer(im[:, :, ::-1], metadata=metadata, scale=1.0)
         v = v.draw_instance_predictions(predictions["instances"])
-        cv.imwrite(f"data/predictions/visualized/{basename_without_ext}{basename_ext}", v.get_image())
+        cv.imwrite(f"data/predictions/visualized/{basename_without_ext}.png", v.get_image())

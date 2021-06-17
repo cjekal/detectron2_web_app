@@ -12,7 +12,8 @@ Here's the steps for performing batch inference.
 1. Copy the Corrosion model weights to `/mnt/disk1/ml-apps/detectron2_web_app/model-corrosion.pth`
 1. Copy the Edges-and-Welds model weights to `/mnt/disk1/ml-apps/detectron2_web_app/model-edges-and-welds.pth`
 1. Kick-off the pipeline by running the following scripts in order:
-    1. `python predict.py`
+    1. `python predict.py corrosion`
+    1. `python predict.py edges-and-welds`
     1. `python merge.py`
     1. `python visualize.py`
 1. Copy the predictions (`/mnt/disk1/ml-apps/detectron2_web_app/data/predictions/corrosion/*.pkl` and `/mnt/disk1/ml-apps/detectron2_web_app/data/predictions/edges-and-welds/*.pkl`) to your long-term storage of choice

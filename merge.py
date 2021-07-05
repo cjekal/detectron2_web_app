@@ -4,8 +4,6 @@ import glob
 import json
 from detectron2.structures.instances import Instances
 
-s = set()
-
 def zip_by_pattern(corrosion_prediction_filenames, edges_welds_predictions_filenames):
     func = lambda x: os.path.basename(x)
     root_filenames = set(list(map(func, corrosion_prediction_filenames)) + list(map(func, edges_welds_predictions_filenames)))
@@ -19,8 +17,6 @@ def zip_by_pattern(corrosion_prediction_filenames, edges_welds_predictions_filen
     ]
 
 def merge(prediction_pair):
-    global s
-
     corrosion_prediction = joblib.load(prediction_pair["corrosion_file"])
     edges_and_welds_prediction = joblib.load(prediction_pair["edges_and_welds_file"])
     for i, pred_class in enumerate(edges_and_welds_prediction.pred_classes):
@@ -37,12 +33,10 @@ def save_bbox_json(merged_prediction):
         json.dump(json_prediction, f, indent=2)
 
 def get_dict_for_instance(instance):
-    global s
     if len(instance.pred_boxes) > 1:
         raise Exception("more than 1 pred boxes")
-    classes = ["Coating Corrosion", "Coating Corrosion", "Edge", "Weld"]
+    classes = ["Corrosion", "Light Corrosion", "Edge", "Weld"]
     pred_class = instance.pred_classes[0].item()
-    s.add(pred_class)
     bbox = instance.pred_boxes.tensor[0].tolist()
     center = instance.pred_boxes.get_centers()[0].tolist()
     return {
@@ -61,5 +55,3 @@ if __name__ == "__main__":
         with open(get_merged_filename(merged_prediction), "wb") as f:
             joblib.dump(merged_prediction, f)
         save_bbox_json(merged_prediction)
-
-    print(s)

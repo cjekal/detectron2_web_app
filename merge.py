@@ -28,7 +28,7 @@ def get_merged_filename(merged_prediction):
 
 def print_bbox_json(merged_prediction):
     json_prediction = {"prediction_pair": merged_prediction["prediction_pair"]}
-    json_prediction["instances"] = [get_dict_for_instance(instance) for instance in merged_prediction["instances"]]
+    json_prediction["instances"] = [get_dict_for_instance(instance) for instance in range(len(merged_prediction["instances"]))]
     print(json.dumps(json_prediction, indent=2))
     print("---")
 

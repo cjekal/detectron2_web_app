@@ -26,11 +26,11 @@ def merge(prediction_pair):
 def get_merged_filename(merged_prediction):
     return os.path.join(f"data/predictions/merged/{merged_prediction['prediction_pair']['base_file']}")
 
-def print_bbox_json(merged_prediction):
+def save_bbox_json(merged_prediction):
     json_prediction = {"prediction_pair": merged_prediction["prediction_pair"]}
     json_prediction["instances"] = [get_dict_for_instance(merged_prediction["instances"][i]) for i in range(len(merged_prediction["instances"]))]
-    print(json.dumps(json_prediction, indent=2))
-    print("---")
+    with open(get_merged_filename(merged_prediction).replace(".pkl", ".json"), "w") as f:
+        json.dump(json_prediction, f, indent=2)
 
 def get_dict_for_instance(instance):
     if len(instance.pred_boxes) > 1:
@@ -40,7 +40,8 @@ def get_dict_for_instance(instance):
     bbox = instance.pred_boxes.tensor[0].tolist()
     center = instance.pred_boxes.get_centers()[0].tolist()
     return {
-        "pred_class": pred_class,
+        "class": pred_class,
+        "class_name": classes[pred_class],
         "bbox": bbox,
         "bbox_center": center
     }
@@ -53,4 +54,4 @@ if __name__ == "__main__":
         merged_prediction = merge(prediction_pair)
         with open(get_merged_filename(merged_prediction), "wb") as f:
             joblib.dump(merged_prediction, f)
-        print_bbox_json(merged_prediction)
+        save_bbox_json(merged_prediction)

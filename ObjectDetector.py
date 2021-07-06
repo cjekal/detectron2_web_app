@@ -74,7 +74,7 @@ class Detector:
 		metadata = MetadataCatalog.get("my_dataset")
 
 		# visualise
-		v = Visualizer(im[:, :, ::-1], metadata=metadata, scale=1.2)
+		v = Visualizer(im[:, :, ::-1], metadata=metadata, scale=1.0)
 		v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
 
 		# get image 
